@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>BC918FA1-558F-45E5-845F-E0CB3D3A08B3</string>
+	<key>IDESourceControlProjectName</key>
+	<string>WaffleAppDemo</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>5D6BC926781E1210217504FF2AE9924CED0B1D0E</key>
+		<string>https://github.com/sebastianCain/WaffleAppDemo</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>WaffleAppDemo.xcodeproj</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>5D6BC926781E1210217504FF2AE9924CED0B1D0E</key>
+		<string>../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/sebastianCain/WaffleAppDemo</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>111</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>5D6BC926781E1210217504FF2AE9924CED0B1D0E</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>5D6BC926781E1210217504FF2AE9924CED0B1D0E</string>
+			<key>IDESourceControlWCCName</key>
+			<string>WaffleAppDemo</string>
+		</dict>
+	</array>
+</dict>
+</plist>
