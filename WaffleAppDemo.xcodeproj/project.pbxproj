@@ -14,6 +14,8 @@
 		0AB9030C1B1670940092F002 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0AB9030B1B1670940092F002 /* Images.xcassets */; };
 		0AB9030F1B1670940092F002 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0AB9030D1B1670940092F002 /* LaunchScreen.xib */; };
 		0AB9031B1B1670940092F002 /* WaffleAppDemoTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 0AB9031A1B1670940092F002 /* WaffleAppDemoTests.m */; };
+		0AB903251B16790F0092F002 /* Ubuntu-L.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0AB903241B16790F0092F002 /* Ubuntu-L.ttf */; };
+		0AB903271B167CF50092F002 /* Ubuntu-R.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0AB903261B167CF50092F002 /* Ubuntu-R.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -40,6 +42,8 @@
 		0AB903141B1670940092F002 /* WaffleAppDemoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WaffleAppDemoTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		0AB903191B1670940092F002 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		0AB9031A1B1670940092F002 /* WaffleAppDemoTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WaffleAppDemoTests.m; sourceTree = "<group>"; };
+		0AB903241B16790F0092F002 /* Ubuntu-L.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Ubuntu-L.ttf"; sourceTree = "<group>"; };
+		0AB903261B167CF50092F002 /* Ubuntu-R.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Ubuntu-R.ttf"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -85,6 +89,7 @@
 				0AB903031B1670940092F002 /* AppDelegate.m */,
 				0AB903051B1670940092F002 /* ViewController.h */,
 				0AB903061B1670940092F002 /* ViewController.m */,
+				0AB903281B167CFD0092F002 /* Custom Fonts */,
 				0AB903081B1670940092F002 /* Main.storyboard */,
 				0AB9030B1B1670940092F002 /* Images.xcassets */,
 				0AB9030D1B1670940092F002 /* LaunchScreen.xib */,
@@ -117,6 +122,15 @@
 				0AB903191B1670940092F002 /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		0AB903281B167CFD0092F002 /* Custom Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				0AB903241B16790F0092F002 /* Ubuntu-L.ttf */,
+				0AB903261B167CF50092F002 /* Ubuntu-R.ttf */,
+			);
+			name = "Custom Fonts";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -199,6 +213,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0AB903251B16790F0092F002 /* Ubuntu-L.ttf in Resources */,
+				0AB903271B167CF50092F002 /* Ubuntu-R.ttf in Resources */,
 				0AB9030A1B1670940092F002 /* Main.storyboard in Resources */,
 				0AB9030F1B1670940092F002 /* LaunchScreen.xib in Resources */,
 				0AB9030C1B1670940092F002 /* Images.xcassets in Resources */,
