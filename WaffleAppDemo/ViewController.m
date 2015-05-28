@@ -11,8 +11,6 @@
 @interface ViewController ()
 @property UIAlertController* alert;
 
-@property UIScrollView *coverScrollView;
-
 @property BOOL coverChanging;
 @property BOOL imageChanging;
 @end
@@ -75,25 +73,29 @@
     // Content
     
     UIScrollView *content = [[UIScrollView alloc]initWithFrame:CGRectMake(0, 60, self.view.frame.size.width, self.view.frame.size.height-60)];
-    [content setContentSize:CGSizeMake(self.view.frame.size.width, self.view.frame.size.height-90)];
+    [content setContentSize:CGSizeMake(self.view.frame.size.width, self.view.frame.size.height+80)];
+	[content setBounces:NO];
     [self.view addSubview:content];
+	
+	self.content = content;
     
     // Cover Photo Setup
     
-    UIScrollView *coverScrollView = [[UIScrollView alloc]initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 150)];
-    self.coverScrollView = coverScrollView;
-    coverScrollView.minimumZoomScale = 0.125;
-    coverScrollView.maximumZoomScale = 2;
-    coverScrollView.tag = 1;
-    coverScrollView.delegate = self;
-    [content addSubview:coverScrollView];
-    
+//    UIView *coverContainerView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 150)];
+//    s = coverScrollView;
+//    coverScrollView.minimumZoomScale = 0.125;
+//    coverScrollView.maximumZoomScale = 2;
+//    coverScrollView.tag = 1;
+//    coverScrollView.delegate = self;
+//    [content addSubview:coverScrollView];
+	
     UIImageView *coverPhoto = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 150)];
     [coverPhoto setBackgroundColor:[UIColor blackColor]];
+	[coverPhoto setContentMode:UIViewContentModeScaleAspectFill];
     self.coverPhoto = coverPhoto;
-    [self.coverScrollView addSubview:coverPhoto];
-    self.coverScrollView.contentSize = coverPhoto.frame.size;
-    
+    [self.content addSubview:coverPhoto];
+	[coverPhoto setClipsToBounds:YES];
+	
     UIButton *cameraButton = [[UIButton alloc]initWithFrame:CGRectMake(20, 105, 25, 25)];
     [cameraButton addTarget:self action:@selector(coverCameraPressed:) forControlEvents:UIControlEventTouchUpInside];
     [cameraButton setImage:[UIImage imageNamed:@"Camera-White"] forState:UIControlStateNormal];
@@ -106,8 +108,7 @@
     
     // Body Setup
     
-    UIScrollView *body = [[UIScrollView alloc]initWithFrame:CGRectMake(0, 150, self.view.frame.size.width, self.view.frame.size.height-210)];
-    [body setContentSize:CGSizeMake(self.view.frame.size.width, body.frame.size.height)];
+	UIView *body = [[UIView alloc]initWithFrame:CGRectMake(0, 150, self.view.frame.size.width, self.view.frame.size.height-210)];
     [content addSubview:body];
     
     //	CADisplayLink *svHeight = [CADisplayLink displayLinkWithTarget:self selector:@selector(svHeight)];
@@ -117,17 +118,37 @@
     [waffleFlavour setTextColor:[UIColor blackColor]];
     [waffleFlavour setTintColor:[UIColor blackColor]];
     [waffleFlavour setPlaceholder:@"Flavour of Waffle"];
-    [waffleFlavour setFont:[UIFont fontWithName:@"Ubuntu" size:36]];
+	[waffleFlavour setFont:[UIFont fontWithName:@"Ubuntu" size:36]];
+	[waffleFlavour setReturnKeyType: UIReturnKeyDone];
+	[waffleFlavour setDelegate:self];
     
     [body addSubview:waffleFlavour];
     
     UITextView *whatsGoingOn = [[UITextView alloc]initWithFrame:CGRectMake(20, 80, self.view.frame.size.width-40, 100)];
-    [whatsGoingOn setTextColor:[UIColor blackColor]];
+    [whatsGoingOn setTextColor:[UIColor lightGrayColor]];
     [whatsGoingOn setTintColor:[UIColor blackColor]];
-    //[whatsGoingOn :@"What's going on"];
+	[whatsGoingOn setText:@"What's Going On..."];
     [whatsGoingOn setFont:[UIFont fontWithName:@"Ubuntu-Light" size:24]];
-    
+	[whatsGoingOn setReturnKeyType: UIReturnKeyDone];
+	[whatsGoingOn setDelegate:self];
+	
     [body addSubview:whatsGoingOn];
+	
+	UILabel *addedPhotoLabel = [[UILabel alloc]initWithFrame:CGRectMake(self.view.frame.size.width/2-100, 200, 200, 50)];
+	[addedPhotoLabel setTextAlignment:NSTextAlignmentCenter];
+	[addedPhotoLabel setTextColor:[UIColor lightGrayColor]];
+	[addedPhotoLabel setFont:[UIFont fontWithName:@"Ubuntu-Light" size:24]];
+	[addedPhotoLabel setText:@"Added Photo:"];
+	
+	[body addSubview:addedPhotoLabel];
+	
+	UIImageView *addedPhoto = [[UIImageView alloc]initWithFrame:CGRectMake(self.view.frame.size.width/2-50, 250, 100, 100)];
+	[addedPhoto setBackgroundColor:[UIColor whiteColor]];
+	self.addedPhoto = addedPhoto;
+	[addedPhoto.layer setBorderWidth:1];
+	[addedPhoto.layer setBorderColor:[[UIColor colorWithWhite:.9 alpha:1] CGColor]];
+	
+	[body addSubview:addedPhoto];
 }
 
 - (BOOL)canBecomeFirstResponder{
@@ -178,8 +199,8 @@
 }
 
 -(void)toolbarCameraPressed:(UIButton*)sender {
-    self.coverChanging = YES;
-    self.imageChanging = NO;
+    self.coverChanging = NO;
+    self.imageChanging = YES;
     [self actionSheet:sender];
 }
 
@@ -208,7 +229,7 @@
                                           
                                       }];
     
-    [alert addAction: takePhoto];
+    [alert addAction:takePhoto];
     [alert addAction:chooseExisiting];
     
     UIPopoverPresentationController *popupPresenter = [alert
@@ -290,46 +311,80 @@
         UIGraphicsEndImageContext();
         imageToUse = normalizedImage;
     }
+	
+	
+	if (self.imageChanging) {
+		self.addedPhoto.image = imageToUse;
+	} else {
+		self.coverPhoto.image = imageToUse;
+	}
 
     
-    if(self.coverChanging){
-        self.coverPhoto.frame = CGRectMake(0, 0, imageToUse.size.width, imageToUse.size.height);
-        self.coverPhoto.image = imageToUse;
-        self.coverPhoto.contentMode = UIViewContentModeScaleAspectFill;
-        self.coverScrollView.zoomScale = self.view.frame.size.width / imageToUse.size.width;
-        self.coverScrollView.contentSize = imageToUse.size;
-        self.coverScrollView.minimumZoomScale = self.view.frame.size.width / imageToUse.size.width;
-    }
-    if (self.imageChanging) {
-        
-    }
-    
-    
-    
-    
+//    if(self.coverChanging){
+//        self.coverPhoto.frame = CGRectMake(0, 0, imageToUse.size.width, imageToUse.size.height);
+//		
+//        self.coverPhoto.contentMode = UIViewContentModeScaleAspectFill;
+//        self.coverScrollView.zoomScale = self.view.frame.size.width / imageToUse.size.width;
+//        self.coverScrollView.contentSize = imageToUse.size;
+//        self.coverScrollView.minimumZoomScale = self.view.frame.size.width / imageToUse.size.width;
+//    }
+//    if (self.imageChanging) {
+//        
+//    }
+//    
+	
     [self dismissViewControllerAnimated: YES completion:nil];
 }
 
 
-#pragma mark - Scrolling Delegates
-
--(UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView{
-    if(scrollView.tag == 1){
-        return self.coverPhoto;
-    }
-    
-    return nil;
-}
-
 -(void)cancelPressed{
-    
-    
+    //In the future, code here will dismiss the view.
 }
 
 
 
 -(void)nextPressed {
-    
+    //In the future, code here will move the UI to the next view.
+}
+
+//Text View/Field Modification
+
+
+//Note: Because UITextField does not have a built in placeholder, an override is needed.
+- (void)textViewDidBeginEditing:(UITextView *)textView
+{
+	if ([textView.text isEqualToString:@"What's Going On..."]) {
+		textView.text = @"";
+		textView.textColor = [UIColor blackColor]; //optional
+	}
+	[textView becomeFirstResponder];
+	[self.content setContentOffset:CGPointMake(0, 140) animated:NO];
+}
+
+- (void)textViewDidEndEditing:(UITextView *)textView
+{
+	if ([textView.text isEqualToString:@""]) {
+		textView.text = @"What's Going On...";
+		textView.textColor = [UIColor lightGrayColor]; //optional
+	}
+	[textView resignFirstResponder];
+}
+
+// Because UITextField does not have a built in done button, an override is needed.
+
+- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text {
+	
+	if([text isEqualToString:@"\n"]) {
+		[textView resignFirstResponder];
+		return NO;
+	}
+	
+	return YES;
+}
+
+-(BOOL)textFieldShouldReturn:(UITextField *)textField {
+	[textField resignFirstResponder];
+	return YES;
 }
 
 @end
