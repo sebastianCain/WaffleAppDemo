@@ -87,20 +87,29 @@
 	[coverPhoto setClipsToBounds:YES];
     
     // set up Action Sheet (Action Sheet was deprecated, this is the replacement)
-    UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"My Alert"
-                                                                   message:@"This is an alert."
+    UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Cover Photo"
+                                                                   message:@"Would you like to take a new photo or choose an existing one?"
                                                             preferredStyle:UIAlertControllerStyleActionSheet];
     
-    UIAlertAction* ok = [UIAlertAction
-                         actionWithTitle:@"OK"
+    UIAlertAction* takePhoto = [UIAlertAction
+                         actionWithTitle:@"Take Photo"
                          style:UIAlertActionStyleDefault
                          handler:^(UIAlertAction * action)
                          {
                              //Do some thing here
                              
+                             
                          }];
+    UIAlertAction* chooseExisiting = [UIAlertAction
+                                actionWithTitle:@"Choose Exisiting"
+                                style:UIAlertActionStyleDefault
+                                handler:^(UIAlertAction * action)
+                                {
+                                    
+                                    
+                                }];
     
-    [alert addAction: ok];
+    [alert addAction: takePhoto];
 
 	
 	// Body Setup
@@ -172,8 +181,7 @@
 
 -(void)coverCameraPressed{
     NSLog(@"Here");
-    [self presentViewController:self.alert animated:YES completion:nil];
-    //[self startMediaBrowserFromViewController:self usingDelegate:self];
+    [self startMediaBrowserFromViewController:self usingDelegate:self];
 }
 
 -(void)toolbarCameraPressed {
@@ -236,17 +244,6 @@
     
     
     [self dismissViewControllerAnimated: YES completion:nil];
-}
-
-- (IBAction)takePhoto:(UIButton *)sender {
-    
-    UIImagePickerController *picker = [[UIImagePickerController alloc] init];
-    picker.delegate = self;
-    picker.allowsEditing = YES;
-    picker.sourceType = UIImagePickerControllerSourceTypeCamera;
-    
-    [self presentViewController:picker animated:YES completion:NULL];
-    
 }
 
 -(void)cancelPressed {
