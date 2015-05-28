@@ -153,7 +153,7 @@
 	
 	[body addSubview:addedPhotoLabel];
 	
-	UIImageView *addedPhoto = [[UIImageView alloc]initWithFrame:CGRectMake(self.view.frame.size.width/2-50, 290, 100, 100)];
+	UIImageView *addedPhoto = [[UIImageView alloc]initWithFrame:CGRectMake(self.view.frame.size.width/2-75, 290, 150, 150)];
 	[addedPhoto setBackgroundColor:[UIColor whiteColor]];
     [addedPhoto setContentMode:UIViewContentModeScaleAspectFit];
     [addedPhoto.layer setMasksToBounds:YES];
@@ -222,6 +222,11 @@
     UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Cover Photo"
                                                                    message:@"Would you like to take a new photo or choose an existing one?"
                                                             preferredStyle:UIAlertControllerStyleActionSheet];
+    if(self.coverChanging){
+        alert.title = @"Cover Photo";
+    }else if (self.imageChanging){
+        alert.title = @"Additional Photo";
+    }
     
     UIAlertAction* takePhoto = [UIAlertAction
                                 actionWithTitle:@"Take Photo"
