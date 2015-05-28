@@ -8,9 +8,8 @@
 
 #import "ViewController.h"
 
-@interface ViewController ()<UIImagePickerControllerDelegate>
+@interface ViewController ()
 
-@property UIImageView *coverPhoto;
 @end
 
 @implementation ViewController
@@ -32,7 +31,7 @@
 	// Button Setup
 	
 	UIButton *cancelButton = [[UIButton alloc]initWithFrame:CGRectMake(10, 10, 75, 40)];
-	[cancelButton addTarget:self action:@selector(coverCameraPressed) forControlEvents:UIControlEventTouchUpInside];
+	[cancelButton addTarget:self action:@selector(cancelPressed) forControlEvents:UIControlEventTouchUpInside];
 	
 	[cancelButton setTitle:@"Cancel" forState:UIControlStateNormal];
 	[cancelButton.titleLabel setFont:[UIFont fontWithName:@"Ubuntu-Light" size:15]];
@@ -70,6 +69,9 @@
 	
 	// Cover Photo Setup
 	
+	UIScrollView *content = [[UIScrollView alloc]initWithFrame:CGRectMake(0, 60, self.view.frame.size.width, self.view.frame.size.height-60)];
+	[content setContentSize:CGSizeMake(self.view.frame.size.width, self.view.frame.size.height-90)];
+	
 	UIImageView *coverPhoto = [[UIImageView alloc]initWithFrame:CGRectMake(0, 60, self.view.frame.size.width, 150)];
 	[coverPhoto setBackgroundColor:[UIColor blackColor]];
     self.coverPhoto = coverPhoto;
@@ -82,14 +84,16 @@
 	
 	[coverPhoto addSubview:cameraButton];
 	
+	[coverPhoto setClipsToBounds:YES];
+	
 	// Body Setup
 	
 	UIScrollView *body = [[UIScrollView alloc]initWithFrame:CGRectMake(0, 210, self.view.frame.size.width, self.view.frame.size.height-210)];
 	[body setContentSize:CGSizeMake(self.view.frame.size.width, body.frame.size.height)];
 	[self.view addSubview:body];
 	
-	CADisplayLink *svHeight = [CADisplayLink displayLinkWithTarget:self selector:@selector(svHeight)];
-	[svHeight addToRunLoop:[NSRunLoop mainRunLoop] forMode:NSRunLoopCommonModes];
+//	CADisplayLink *svHeight = [CADisplayLink displayLinkWithTarget:self selector:@selector(svHeight)];
+//	[svHeight addToRunLoop:[NSRunLoop mainRunLoop] forMode:NSRunLoopCommonModes];
 	
 	UITextField *waffleFlavour = [[UITextField alloc]initWithFrame:CGRectMake(20, 20, self.view.frame.size.width-40, 64)];
 	[waffleFlavour setTextColor:[UIColor blackColor]];
@@ -154,6 +158,11 @@
     [self startMediaBrowserFromViewController:self usingDelegate:self];
 }
 
+-(void)toolbarCameraPressed {
+	NSLog(@"Here");
+	[self startMediaBrowserFromViewController:self usingDelegate:self];
+	
+}
 #pragma mark - UIImagePicker
 
 - (BOOL) startMediaBrowserFromViewController: (UIViewController*) controller
@@ -179,7 +188,7 @@
     
     mediaUI.delegate = delegate;
     self.picker = mediaUI;
-    [controller presentModalViewController: mediaUI animated: YES];
+    [controller presentViewController: mediaUI animated: YES completion:nil];
     return YES;
 }
 
@@ -202,13 +211,13 @@
         imageToUse = originalImage;
     }
     self.coverPhoto.image = imageToUse;
-    self.coverPhoto.contentMode = UIViewContentModeScaleAspectFit;
+    self.coverPhoto.contentMode = UIViewContentModeScaleAspectFill;
     
     
     // Do something with imageToUse
     
     
-    [self dismissModalViewControllerAnimated: YES];
+    [self dismissViewControllerAnimated: YES completion:nil];
 }
 
 
@@ -218,10 +227,6 @@
 
 -(void)nextPressed {
 	
-}
-
--(void)svHeight {
-	[self.body setContentSize:CGSizeMake(self.view.frame.size.width, self.body.frame.size.height+self.whatsGoingOn.frame.size.height)];
 }
 
 @end
