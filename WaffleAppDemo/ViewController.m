@@ -77,18 +77,20 @@
     // Content
     
     UIScrollView *content = [[UIScrollView alloc]initWithFrame:CGRectMake(0, 60, self.view.frame.size.width, self.view.frame.size.height-60)];
-    [content setContentSize:CGSizeMake(self.view.frame.size.width, self.view.frame.size.height+80)];
-	[content setBounces:NO];
+    [content setContentSize:CGSizeMake(self.view.frame.size.width, self.view.frame.size.height+90)];
+//	[content setBounces:NO];
     [self.view addSubview:content];
 	
 	self.content = content;
     
     // Cover Photo Setup
+    //We added the scroll view for cropping purposes
     
     UIScrollView *coverScrollView = [[UIScrollView alloc]initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 150)];
     self.coverScrollView = coverScrollView;
-    coverScrollView.minimumZoomScale = 0.125;
-    coverScrollView.maximumZoomScale = 2;
+    coverScrollView.minimumZoomScale = 1;
+    coverScrollView.maximumZoomScale = 4;
+    coverScrollView.bounces = NO;
     coverScrollView.tag = 1;
     coverScrollView.delegate = self;
     [content addSubview:coverScrollView];
@@ -121,6 +123,8 @@
     UITextField *waffleFlavour = [[UITextField alloc]initWithFrame:CGRectMake(20, 20, self.view.frame.size.width-40, 64)];
     [waffleFlavour setTextColor:[UIColor blackColor]];
     [waffleFlavour setTintColor:[UIColor blackColor]];
+    [waffleFlavour setAdjustsFontSizeToFitWidth:YES];
+    [waffleFlavour setMinimumFontSize:16];
     [waffleFlavour setPlaceholder:@"Flavour of Waffle"];
     [waffleFlavour setFont:[UIFont fontWithName:@"Ubuntu" size:36]];
     waffleFlavour.tag = 10;
@@ -131,7 +135,7 @@
     
     [body addSubview:waffleFlavour];
     
-    UITextView *whatsGoingOn = [[UITextView alloc]initWithFrame:CGRectMake(20, 80, self.view.frame.size.width-40, 100)];
+    UITextView *whatsGoingOn = [[UITextView alloc]initWithFrame:CGRectMake(20, 80, self.view.frame.size.width-40, 150)];
     [whatsGoingOn setTextColor:[UIColor lightGrayColor]];
     [whatsGoingOn setTintColor:[UIColor blackColor]];
 	[whatsGoingOn setText:@"What's Going On..."];
@@ -141,7 +145,7 @@
 	[whatsGoingOn setDelegate:self];
     [body addSubview:whatsGoingOn];
 	
-	UILabel *addedPhotoLabel = [[UILabel alloc]initWithFrame:CGRectMake(self.view.frame.size.width/2-100, 200, 200, 50)];
+	UILabel *addedPhotoLabel = [[UILabel alloc]initWithFrame:CGRectMake(self.view.frame.size.width/2-100, 240, 200, 50)];
 	[addedPhotoLabel setTextAlignment:NSTextAlignmentCenter];
 	[addedPhotoLabel setTextColor:[UIColor lightGrayColor]];
 	[addedPhotoLabel setFont:[UIFont fontWithName:@"Ubuntu-Light" size:24]];
@@ -149,7 +153,7 @@
 	
 	[body addSubview:addedPhotoLabel];
 	
-	UIImageView *addedPhoto = [[UIImageView alloc]initWithFrame:CGRectMake(self.view.frame.size.width/2-50, 250, 100, 100)];
+	UIImageView *addedPhoto = [[UIImageView alloc]initWithFrame:CGRectMake(self.view.frame.size.width/2-50, 290, 100, 100)];
 	[addedPhoto setBackgroundColor:[UIColor whiteColor]];
     [addedPhoto setContentMode:UIViewContentModeScaleAspectFit];
     [addedPhoto.layer setMasksToBounds:YES];
@@ -332,21 +336,15 @@
 	
 	if (self.imageChanging) {
 		self.addedPhoto.image = imageToUse;
-	} else {
-		self.coverPhoto.image = imageToUse;
 	}
-
-    
     if(self.coverChanging){
+        self.coverScrollView.zoomScale = 1;
+        self.coverPhoto.contentMode = UIViewContentModeScaleAspectFill;
         self.coverPhoto.frame = CGRectMake(0, 0, imageToUse.size.width, imageToUse.size.height);
         self.coverPhoto.image = imageToUse;
-        self.coverPhoto.contentMode = UIViewContentModeScaleAspectFill;
-        self.coverScrollView.zoomScale = self.view.frame.size.width / imageToUse.size.width;
         self.coverScrollView.contentSize = imageToUse.size;
         self.coverScrollView.minimumZoomScale = self.view.frame.size.width / imageToUse.size.width;
-    }
-    if (self.imageChanging) {
-        
+        self.coverScrollView.zoomScale = self.view.frame.size.width / imageToUse.size.width;
     }
     
     
@@ -357,7 +355,14 @@
     [self dismissViewControllerAnimated: YES completion:nil];
 }
 
+#pragma mark - Scroll Handling
 
+-(UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView{
+    if(scrollView.tag == 1){
+        return self.coverPhoto;
+    }
+    return nil;
+}
 
 
 
@@ -402,7 +407,11 @@
         textView.textColor = [UIColor blackColor]; //optional
     }
     [textView becomeFirstResponder];
-    [self.content setContentOffset:CGPointMake(0, 140) animated:NO];
+    [self.content setContentOffset:CGPointMake(0, 150) animated:YES];
+}
+
+-(void)textFieldDidBeginEditing:(UITextField *)textField{
+    [self.content setContentOffset:CGPointMake(0, 150) animated:YES];
 }
 
 - (void)textViewDidEndEditing:(UITextView *)textView
