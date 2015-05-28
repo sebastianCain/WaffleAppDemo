@@ -85,6 +85,17 @@
 	[coverPhoto addSubview:cameraButton];
 	
 	[coverPhoto setClipsToBounds:YES];
+    
+    // set up Action Sheet (Action Sheet was deprecated, this is the replacement)
+    UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"My Alert"
+                                                                   message:@"This is an alert."
+                                                            preferredStyle:UIAlertControllerStyleActionSheet];
+    
+    UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault
+                                                          handler:^(UIAlertAction * action) {}];
+    
+    [alert addAction:defaultAction];
+    [self presentViewController:alert animated:YES completion:nil];
 	
 	// Body Setup
 	
@@ -220,6 +231,16 @@
     [self dismissViewControllerAnimated: YES completion:nil];
 }
 
+- (IBAction)takePhoto:(UIButton *)sender {
+    
+    UIImagePickerController *picker = [[UIImagePickerController alloc] init];
+    picker.delegate = self;
+    picker.allowsEditing = YES;
+    picker.sourceType = UIImagePickerControllerSourceTypeCamera;
+    
+    [self presentViewController:picker animated:YES completion:NULL];
+    
+}
 
 -(void)cancelPressed {
     
