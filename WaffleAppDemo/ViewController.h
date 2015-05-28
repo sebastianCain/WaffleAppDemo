@@ -11,9 +11,12 @@
 @interface ViewController : UIViewController <UITextFieldDelegate,UITextViewDelegate, UIScrollViewDelegate, UIImagePickerControllerDelegate,UINavigationControllerDelegate>
 
 
+
 @property UITextView *whatsGoingOn;
-@property UIScrollView *body;
+@property UIScrollView *content;
 @property UIImagePickerController *picker;
 @property UIImageView *coverPhoto;
+@property UIImageView *addedPhoto;
+
 @end
 
