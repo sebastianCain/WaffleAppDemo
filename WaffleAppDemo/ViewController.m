@@ -9,7 +9,7 @@
 #import "ViewController.h"
 
 @interface ViewController ()
-
+@property UIAlertController* alert;
 @end
 
 @implementation ViewController
@@ -91,11 +91,17 @@
                                                                    message:@"This is an alert."
                                                             preferredStyle:UIAlertControllerStyleActionSheet];
     
-    UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault
-                                                          handler:^(UIAlertAction * action) {}];
+    UIAlertAction* ok = [UIAlertAction
+                         actionWithTitle:@"OK"
+                         style:UIAlertActionStyleDefault
+                         handler:^(UIAlertAction * action)
+                         {
+                             //Do some thing here
+                             
+                         }];
     
-    [alert addAction:defaultAction];
-    [self presentViewController:alert animated:YES completion:nil];
+    [alert addAction: ok];
+
 	
 	// Body Setup
 	
@@ -166,7 +172,8 @@
 
 -(void)coverCameraPressed{
     NSLog(@"Here");
-    [self startMediaBrowserFromViewController:self usingDelegate:self];
+    [self presentViewController:self.alert animated:YES completion:nil];
+    //[self startMediaBrowserFromViewController:self usingDelegate:self];
 }
 
 -(void)toolbarCameraPressed {
