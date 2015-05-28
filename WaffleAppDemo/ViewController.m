@@ -15,6 +15,8 @@
 
 @property BOOL coverChanging;
 @property BOOL imageChanging;
+
+@property UIButton *keyboardDoneButton;
 @end
 
 @implementation ViewController
@@ -118,6 +120,8 @@
     [waffleFlavour setTintColor:[UIColor blackColor]];
     [waffleFlavour setPlaceholder:@"Flavour of Waffle"];
     [waffleFlavour setFont:[UIFont fontWithName:@"Ubuntu" size:36]];
+    waffleFlavour.tag = 10;
+    waffleFlavour.delegate = self;
     
     [body addSubview:waffleFlavour];
     
@@ -126,14 +130,19 @@
     [whatsGoingOn setTintColor:[UIColor blackColor]];
     //[whatsGoingOn :@"What's going on"];
     [whatsGoingOn setFont:[UIFont fontWithName:@"Ubuntu-Light" size:24]];
+    whatsGoingOn.delegate = self;
+    whatsGoingOn.tag = 11;
     
     [body addSubview:whatsGoingOn];
+    
+    
+    //Keyboard notifications
+    
+    NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
+    [center addObserver:self selector:@selector(keyboardOnScreen:) name:UIKeyboardDidShowNotification object:nil];
+    [center addObserver:self selector:@selector(keyboardHiding:) name:UIKeyboardDidHideNotification object:nil];
+    
 }
-
-- (BOOL)canBecomeFirstResponder{
-    return YES;
-}
-
 
 -(UIView *)inputAccessoryView {
     UIView *toolbar = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 50)];
@@ -157,19 +166,17 @@
     
     [toolbar addSubview:toolbarCameraButton];
     
+    UIButton *doneButton = [[UIButton alloc]initWithFrame:CGRectMake(self.view.frame.size.width - 60, 0, 60, 50)];
+    [doneButton setTitle:@"Done" forState:UIControlStateNormal];
+    [doneButton setTitleColor:[UIColor colorWithRed:0 green:0.478431 blue:1.0 alpha:1.0] forState:UIControlStateNormal];
+    [doneButton addTarget:self action:@selector(donePressed:) forControlEvents:UIControlEventTouchUpInside];
+    doneButton.hidden = YES;
+    self.keyboardDoneButton = doneButton;
+    [toolbar addSubview:doneButton];
+    
     return toolbar;
 }
 
--(BOOL)prefersStatusBarHidden {
-    return YES;
-}
-
-
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
 
 -(void)coverCameraPressed:(UIButton*)sender{
     self.coverChanging = YES;
@@ -178,8 +185,8 @@
 }
 
 -(void)toolbarCameraPressed:(UIButton*)sender {
-    self.coverChanging = YES;
-    self.imageChanging = NO;
+    self.coverChanging = NO;
+    self.imageChanging = YES;
     [self actionSheet:sender];
 }
 
@@ -205,11 +212,20 @@
                                       handler:^(UIAlertAction * action)
                                       {
                                           [self startMediaBrowserFromViewController:self usingDelegate:self takePhoto:NO];
-                                          
+                                      }];
+    
+    UIAlertAction* cancel = [UIAlertAction
+                                      actionWithTitle:@"Cancel"
+                                      style:UIAlertActionStyleDestructive
+                                      handler:^(UIAlertAction * action)
+                                      {
+                                          [alert dismissViewControllerAnimated:YES completion:nil];
                                       }];
     
     [alert addAction: takePhoto];
     [alert addAction:chooseExisiting];
+    [alert addAction:cancel];
+    
     
     UIPopoverPresentationController *popupPresenter = [alert
                                                        popoverPresentationController];
@@ -305,8 +321,8 @@
     }
     
     
-    
-    
+    self.imageChanging = NO;
+    self.coverChanging = NO;
     [self dismissViewControllerAnimated: YES completion:nil];
 }
 
@@ -321,15 +337,59 @@
     return nil;
 }
 
+#pragma mark - Keyboard Handling
+
+-(void)keyboardOnScreen:(NSNotification *)notification
+{
+    NSDictionary *info  = notification.userInfo;
+    NSValue      *value = info[UIKeyboardFrameEndUserInfoKey];
+    
+    CGRect rawFrame      = [value CGRectValue];
+    CGRect keyboardFrame = [self.view convertRect:rawFrame fromView:nil];
+    
+    NSLog(@"keyboardFrame: %@", NSStringFromCGRect(keyboardFrame));
+    
+    if (keyboardFrame.size.height > 50) {
+        self.keyboardDoneButton.hidden = NO;
+    }
+}
+
+-(void)keyboardHiding:(NSNotification*)notification{
+    self.keyboardDoneButton.hidden = YES;
+}
+
+- (BOOL)canBecomeFirstResponder{
+    return YES;
+}
+
+-(void)donePressed:(UIButton*)sender {
+    [self.view endEditing:YES];
+}
+
+
+
+#pragma mark - Text View Handling
+
+#pragma mark - Other Functions
+
+-(BOOL)prefersStatusBarHidden {
+    return YES;
+}
+
+
+
 -(void)cancelPressed{
     
     
 }
 
-
-
 -(void)nextPressed {
     
+}
+
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
 }
 
 @end
