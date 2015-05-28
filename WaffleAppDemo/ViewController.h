@@ -8,9 +8,11 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ViewController : UIViewController
+@interface ViewController : UIViewController <UITextFieldDelegate, UIScrollViewDelegate>
 
+
+@property UITextView *whatsGoingOn;
+@property UIScrollView *body;
 @property UIImagePickerController *picker;
-
 @end
 
