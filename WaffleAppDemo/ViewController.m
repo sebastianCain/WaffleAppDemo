@@ -163,6 +163,10 @@
 	
 	[body addSubview:addedPhoto];
     
+    UIButton *addedPhotoTrigger = [[UIButton alloc]initWithFrame:addedPhoto.frame];
+    [addedPhotoTrigger addTarget:self action:@selector(toolbarCameraPressed:) forControlEvents:UIControlEventTouchUpInside];
+    [body addSubview:addedPhotoTrigger];
+    
     //Keyboard notifications
     
     NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
